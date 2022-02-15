@@ -4,7 +4,7 @@ import numpy as np
 
 class ArchiveDownloader:
     '''
-    Archive download utility utilizing multiprocessing.
+    Internet Archive download utility utilizing multiprocessing.
     '''
     def __init__(self, archive_identifier : str, output_loc : str, glob_str : str, process_num : int) -> None:
         '''
@@ -66,11 +66,34 @@ if __name__ == '__main__':
     '''
     Driver for running download task from command line.
     '''
-    ## TODO: add command line arguments
+    import argparse
+
+    ## Define command line argument parser and arguments ##
+
     archive_identifier = "" # identifier of item to download from
     output_loc = "" # output directory on local disk
-    glob_str = r"" # glob pattern to filter items to download within archive
+    glob_str = None # glob pattern to filter items to download within archive
     process_num = 4 # number of simultaneous download processes to run
 
+    parser = argparse.ArgumentParser(description="Downloads items from an archive on the InternetArchive. Must specify archive identifier and output location.")
+
+    parser.add_argument("-i", "--identifier", type=str, help="Identifier of archive item to download from.")
+    parser.add_argument("-o", "--output_loc", type=str, help="Output location to download items to.")
+    parser.add_argument("-g", "--glob_str", type=str, help="Glob string to filter items within archive for download. Default: None.")
+    parser.add_argument("-p", "--process_num", type=int, help="Number of simultaneous download processes to run. Default: 4.")
+
+    args = parser.parse_args()
+
+    ## Validate arguments ##
+    if not args.identifier:
+        raise RuntimeError("Must specify archive identifier with -i <identifier>.")
+    if not args.output_loc:
+        raise RuntimeError("Must specify output location with -o <output_loc>.")
+    if not args.glob_str:
+        glob_str = None
+    if not args.process_num:
+        process_num = 4
+
+    ## Run download task ##
     downloader = ArchiveDownloader(archive_identifier, output_loc, glob_str, process_num)
     downloader.run_parallel()
