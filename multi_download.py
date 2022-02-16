@@ -6,7 +6,7 @@ class ArchiveDownloader:
     '''
     Internet Archive download utility utilizing multiprocessing.
     '''
-    def __init__(self, archive_identifier : str, output_loc : str, glob_str : str, process_num : int) -> None:
+    def __init__(self, archive_identifier : str, output_loc : str, glob_str : str = None, process_num : int = 4) -> None:
         '''
         Initializes utility for downloading archive with given parameters.
 
@@ -20,6 +20,30 @@ class ArchiveDownloader:
             glob pattern to filter items to download within archive
         process_num : int
             number of simultaneous download processes to run
+        '''
+        self.archive_identifier = archive_identifier
+        self.output_loc = output_loc
+        self.glob_str = glob_str
+        self.process_num = process_num
+    
+    def set_params(self, archive_identifier : str, output_loc : str, glob_str : str = None, process_num : int = 4) -> None:
+        '''
+        Sets parameters for an archive download.
+
+        Parameters
+        ----------
+        archive_identifier : str
+            identifier of archive item to download from 
+        output_loc : str
+            output directory for downloads on local disk
+        glob_str : str
+            glob pattern to filter items to download within archive
+        process_num : int
+            number of simultaneous download processes to run
+        
+        Returns
+        -------
+        None
         '''
         self.archive_identifier = archive_identifier
         self.output_loc = output_loc
@@ -41,9 +65,9 @@ class ArchiveDownloader:
         '''
         internetarchive.download(self.identifier, destdir=output_loc, verbose=True, ignore_existing=True, files=files)
 
-    def run_parallel(self) -> None:
+    def download_archive(self) -> None:
         '''
-        Runs a parallel download task. Splits downloading of an archive over given number of processes.
+        Runs a download task. Splits downloading of an archive over given number of processes.
 
         Returns
         -------
@@ -64,7 +88,26 @@ class ArchiveDownloader:
 # Driver code
 if __name__ == '__main__':
     '''
-    Driver for running download task from command line.
+    Driver for running archive download task from command line.
+
+    Command Line Arguments
+    ----------------------
+    -i, --identifier
+        type=str
+        Required
+        Identifier of archive item to download from.
+    -o, --output_loc
+        type=str
+        Required
+        Output location to download items to.
+    -g, --glob_str
+        type=str
+        Default: None
+        Glob string to filter items within archive for download.
+    -p, --process_num
+        type=int
+        Default: 4
+        Number of simultaneous download processes to run.
     '''
     import argparse
 
@@ -96,4 +139,4 @@ if __name__ == '__main__':
 
     ## Run download task ##
     downloader = ArchiveDownloader(archive_identifier, output_loc, glob_str, process_num)
-    downloader.run_parallel()
+    downloader.download_archive()
