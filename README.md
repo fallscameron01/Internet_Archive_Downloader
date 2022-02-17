@@ -4,7 +4,7 @@ Python utility for downloading files from an archive on the Internet Archive. Us
 
 ## Usage ##
 
-Can be used by either running `multi_download.py` with required arguments or
+Can be used by either running `archive_downloader.py` with required arguments or
 by importing the ArchiveDownloader function into your own program.
 
 #### Details
@@ -13,7 +13,7 @@ An archive download requires specifying the identifier of the archive. The ident
 
 The `ArchiveDownloader` class speeds up the downloading of an archive with a large number of files by splitting the files to download among simultaneous processes. This allows multiple files to be downloaded at the same time, increasing the total bandwidth available. By default, the `ArchiveDownloader` class will use 4 processes, but this number can be increased or decreased by specifying the `process_num` parameter.
 
-#### `multi_download.py` Command Line Arguments
+#### `archive_downloader.py` Command Line Arguments
 
 ```
 -i, --identifier
@@ -41,5 +41,5 @@ The `ArchiveDownloader` class speeds up the downloading of an archive with a lar
 ```
 #### Example Command Line Usage
 
-The command `python multi_download.py -i example_archive_item -o C:\My_Output_Folder -g "*.jpg" -p 16` will download jpg files from "example_archive_item" to the folder "C:\My_Output_Folder" using 16 processes.
+The command `python archive_downloader.py -i example_archive_item -o C:\My_Output_Folder -g "*.jpg" -p 16` will download jpg files from "example_archive_item" to the folder "C:\My_Output_Folder" using 16 processes.
 
