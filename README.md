@@ -39,3 +39,7 @@ The `ArchiveDownloader` class speeds up the downloading of an archive with a lar
     Default: 4
     Number of simultaneous download processes to run.
 ```
+#### Example Command Line Usage
+
+The command `python multi_download.py -i example_archive_item -o C:\My_Output_Folder -g "*.jpg" -p 16` will download jpg files from "example_archive_item" to the folder "C:\My_Output_Folder" using 16 processes.
+
