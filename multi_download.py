@@ -63,7 +63,7 @@ class ArchiveDownloader:
         -------
         None
         '''
-        internetarchive.download(self.identifier, destdir=output_loc, verbose=True, ignore_existing=True, files=files)
+        internetarchive.download(self.archive_identifier, destdir=self.output_loc, verbose=True, ignore_existing=True, files=files)
 
     def download_archive(self) -> None:
         '''
@@ -74,7 +74,7 @@ class ArchiveDownloader:
         None
         '''
         # names of files to download
-        names = np.array([f.name for f in internetarchive.get_files(self.identifier, glob_pattern=self.glob_str)])
+        names = np.array([f.name for f in internetarchive.get_files(self.archive_identifier, glob_pattern=self.glob_str)])
         
         pool = Pool(processes=self.process_num) # pool object with number of processes to run
 
@@ -130,13 +130,25 @@ if __name__ == '__main__':
     ## Validate arguments ##
     if not args.identifier:
         raise RuntimeError("Must specify archive identifier with -i <identifier>.")
+    else:
+        archive_identifier = args.identifier
+    
     if not args.output_loc:
         raise RuntimeError("Must specify output location with -o <output_loc>.")
+    else:
+        output_loc = args.output_loc
+    
     if not args.glob_str:
         glob_str = None
+    else:
+        glob_str = args.glob_str
+    
     if not args.process_num:
         process_num = 4
+    else:
+        process_num = args.process_num
 
     ## Run download task ##
+    print("Beginning Download Task of", archive_identifier, "to", output_loc, "with filter", glob_str, "using", process_num, "processes.")
     downloader = ArchiveDownloader(archive_identifier, output_loc, glob_str, process_num)
     downloader.download_archive()
